@@ -9,13 +9,21 @@
 import Foundation
 
 /// Person Class 타입
-struct Person {
+class Person {
     var nickName: String
-    var balance: Int = 0
     
-    init(nickName: String, balance: Int) {
+    init(nickName: String) {
         self.nickName = nickName
+    }
+}
+
+/// Person Class를 상속한 Customer Class
+class Customer: Person {
+    var balance: Int = 0
+
+    init(nickName: String, balance: Int) {
         self.balance = balance
+        super.init(nickName: nickName)
     }
     
     /// 커피를 구매하는 함수
@@ -23,7 +31,7 @@ struct Person {
     ///   - coffee: 커피 종류
     ///   - coffeeShop: 커피매장
     ///   - name: 주문자 닉네임
-    mutating func makeOrder(_ coffee: Coffee, of coffeeShop: CoffeeShop, by name: String) {
+    func makeOrder(_ coffee: Coffee, of coffeeShop: CoffeeShop, by name: String) {
         if (coffee.rawValue > self.balance) {
             print("잔액이 \(coffee.rawValue - self.balance)원만큼 부족합니다.")
         } else {
@@ -31,6 +39,10 @@ struct Person {
             coffeeShop.receiveOrder(coffee, by: name)
         }
     }
+}
+
+/// Person Class를 상속한 Barista Class
+class Barista: Person {
 }
 
 /// CoffeeShop Class 타입
@@ -72,8 +84,8 @@ enum Coffee: Int {
     case 모카 = 5500
 }
 
-var misterLee = Person(nickName: "misterLee", balance: 4700)
-var missKim = Person(nickName: "missKim", balance: 8300)
+var misterLee = Barista(nickName: "misterLee")
+var missKim = Customer(nickName: "missKim", balance: 8300)
 let yagombucks = CoffeeShop(shopName: "yagombucks", barista: misterLee)
 
 missKim.makeOrder(.아메리카노, of: yagombucks, by: "missKim")
